@@ -1,1 +1,88 @@
+№1
 
+int n = Convert.ToInt32(Console.ReadLine());
+int count = 0;
+int last_num = 0, cur_num = 0, next_num = 0;
+for (int i = 0; i < n; i++)
+{
+    int num = Convert.ToInt32(Console.ReadLine());
+    if (i == 0) last_num = num;                
+    else if (i == 1) cur_num = num;
+    else if (i == 2) next_num = num;
+    else {
+        last_num = cur_num;
+        cur_num = next_num;
+        next_num = num;
+    }
+    if (i > 2) if (cur_num < last_num && cur_num < next_num) count++;
+}
+Console.WriteLine(count);
+
+
+№2
+
+int n = Convert.ToInt32(Console.ReadLine());
+int count = 0;
+int last_num = 0;
+for (int i = 0; i < n; i++) { 
+    int num = Convert.ToInt32(Console.ReadLine());
+    if (i == 0) last_num = num;
+    else
+    {
+        if (last_num > 0 != num > 0)
+        {
+            count++;
+            last_num = num;
+        }
+    }
+}
+Console.WriteLine(count);
+
+
+№3
+
+int n = Convert.ToInt32(Console.ReadLine());
+int length = 1, max_len = 0;
+int last_num = 0;
+for (int i = 0; i < n; i++)
+{
+    int num = Convert.ToInt32(Console.ReadLine());
+    if (i == 0) last_num = num;
+    else
+    {
+        if (last_num == num) length++;
+        else
+        {
+            max_len = Math.Max(max_len, length);
+            length = 1;
+        }
+        last_num = num;
+    }
+}
+Console.WriteLine(max_len);
+
+
+№4
+
+int n = Convert.ToInt32(Console.ReadLine());
+int length = 1, min_len = 10000000;
+int last_num = 0;
+bool has_negative = false;
+for (int i = 0; i < n; i++)
+{
+    int num = Convert.ToInt32(Console.ReadLine());
+    if (num < 0) has_negative = true;
+    if (i == 0) last_num = num;
+    else
+    {
+        if (last_num < 0 && num < 0) length++;
+        else if (last_num < 0 && num >= 0)
+        {
+            min_len = Math.Min(min_len, length);
+            length = 1;
+        }
+    }
+    last_num = num;
+}
+if (has_negative) Console.WriteLine(min_len);
+else Console.WriteLine(0);

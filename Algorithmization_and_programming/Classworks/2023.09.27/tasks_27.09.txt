@@ -51,7 +51,7 @@ for (int i = 0; i < n; i++)
     else
     {
         if (last_num == num) length++;
-        else
+        if (last_num != num || i == n - 1)
         {
             max_len = Math.Max(max_len, length);
             length = 1;
@@ -66,11 +66,12 @@ Console.WriteLine(max_len);
 
 int n = Convert.ToInt32(Console.ReadLine());
 int length = 1, min_len = 10000000;
-int last_num = 0;
+int num = 0, last_num = 0;
 bool has_negative = false;
-for (int i = 0; i < n; i++)
+for (int i = 0; i <= n; i++)
 {
-    int num = Convert.ToInt32(Console.ReadLine());
+    if (i != n) num = Convert.ToInt32(Console.ReadLine());
+    else num = 0;
     if (num < 0) has_negative = true;
     if (i == 0) last_num = num;
     else

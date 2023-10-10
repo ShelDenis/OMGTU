@@ -1,0 +1,96 @@
+№1
+
+int n = Convert.ToInt32(Console.ReadLine());
+int[] list = new int[n];
+for (int i = 0; i < n; i++) list[i] = Convert.ToInt32(Console.ReadLine());
+
+bool ok = true;
+for (int i = 0; i < list.Length; i++)
+{
+    if (list[i] % (i + 1) != 0)
+    {
+        ok = false;
+        break;
+    }
+}
+if (!ok) Console.WriteLine("Не все элементы кратны своему номеру");
+else Console.WriteLine("Все элементы кратны своему номеру");
+
+
+№2
+
+int n = Convert.ToInt32(Console.ReadLine());
+int[] list = new int[n];
+for (int i = 0; i < n; i++) list[i] = Convert.ToInt32(Console.ReadLine());
+
+for (int i = 0; i < list.Length; i++)
+{
+    if (list[i] % 2 == 0) {
+        Console.WriteLine($"Первый четный элемент {i + 1}-й с начала");
+        break;
+    }
+}
+
+
+№3
+
+int n = Convert.ToInt32(Console.ReadLine());
+int[] list = new int[n];
+for (int i = 0; i < n; i++) list[i] = Convert.ToInt32(Console.ReadLine());
+
+int index = -1;
+for (int i = 0; i < list.Length; i++) 
+{
+    if (list[i] == 0) index = i;
+}
+if (index == -1) Console.WriteLine("Нулевых элементов нет");
+else
+{
+    Console.WriteLine($"Последний нулевой элемент {index + 1}-й с начала");
+}
+
+
+№4
+
+int n = Convert.ToInt32(Console.ReadLine());
+int[] list = new int[n];
+for (int i = 0; i < n; i++) list[i] = Convert.ToInt32(Console.ReadLine());
+
+int mn = list.Min();
+int count = 0;
+for (int i = 0; i < list.Length; i++)
+{
+    if (list[i] % mn == 0) count++;
+}
+Console.WriteLine(count);
+
+№5
+
+int n = Convert.ToInt32(Console.ReadLine());
+int[] list = new int[n];
+for (int i = 0; i < n; i++) list[i] = Convert.ToInt32(Console.ReadLine());
+
+int mn = list.Min(), mx = list.Max();
+int index_mn = 0, index_mx = 0;
+for (int i = 0; i < list.Length; i++)
+{
+    if (list[i] == mn) index_mn = i;
+    if (list[i] == mx) index_mx = i;
+}
+
+if (Math.Abs(index_mn - index_mx) == 2) Console.WriteLine("Последовательность состоит из одного элемента, будет убывающей");
+else if (Math.Abs(index_mn - index_mx) < 2) Console.WriteLine("Последовательности не существует");
+else
+{
+    bool ok = true;
+    for (int i = Math.Min(index_mx, index_mn); i < Math.Max(index_mn, index_mx) - 1; i++)
+    {
+        if (list[i + 1] >= list[i])
+        {
+            Console.WriteLine("Не убывающая последовательность");
+            ok = false;
+            break;
+        }
+    }
+    if (ok) Console.WriteLine("Убывающая последовательность");
+}

@@ -1,0 +1,100 @@
+№1
+
+int n = Convert.ToInt32(Console.ReadLine());
+int count = 0;
+int[] list = new int[n];
+for (int i = 0; i < n; i++) list[i] = Convert.ToInt32(Console.ReadLine());
+
+int mn = list.Min(), mx = list.Max();
+int index_mn = 0, index_mx = 0;
+
+for (int i = 0; i < list.Length; i++)
+{
+    if (list[i] == mn) index_mn = i;
+    if (list[i] == mx) index_mx = i;
+}
+if (Math.Abs(index_mn - index_mx) < 2) Console.WriteLine("Последовательности не существует");
+else
+{
+    for (int i = Math.Min(index_mx, index_mn) + 1; i < Math.Max(index_mn, index_mx); i++)
+        if (list[i] % 2 == 0) count++;
+    Console.WriteLine(count);
+}
+
+
+№2
+
+int n = Convert.ToInt32(Console.ReadLine());
+int count = 0;
+int[] list = new int[n];
+for (int i = 0; i < n; i++) list[i] = Convert.ToInt32(Console.ReadLine());
+
+for (int i = 0; i < list.Length; i++) 
+{
+    if ((i + 1) % 2 == 0)
+    {
+        string str_num = list[i].ToString();
+        if (str_num.Contains("5")) count++;
+    }
+}
+Console.WriteLine(count);
+
+
+№3
+
+int n = Convert.ToInt32(Console.ReadLine());
+int[] list = new int[n];
+for (int i = 0; i < n; i++) list[i] = Convert.ToInt32(Console.ReadLine());
+
+for (int i = 0; i < list.Length; i++) 
+{
+    if (list[i] % 2 == 1)
+    {
+        int summa = 0;
+        string str_num = list[i].ToString();
+        foreach (char c in str_num) summa += Convert.ToInt32((c.ToString()));
+        list[i] = summa;
+    }
+}
+foreach (int c in list) Console.Write(c + " ");
+
+
+№4
+
+int n = Convert.ToInt32(Console.ReadLine());
+int[] list = new int[n];
+int count = 0, summa_odd = 0, q_odd = 0;
+for (int i = 0; i < n; i++)
+{
+    int num = Convert.ToInt32(Console.ReadLine());
+    list[i] = num;
+    if (num % 2 == 1)
+    {
+        summa_odd += num;
+        q_odd++;
+    }
+}
+
+double average = summa_odd / q_odd; 
+
+foreach (int elem in list) 
+{
+    if (elem > average) count++;
+}
+
+Console.WriteLine(count);
+
+
+№5
+
+int n = Convert.ToInt32(Console.ReadLine());
+int[] list = new int[n];
+bool imeetsya = false;
+for (int i = 0; i < n; i++) list[i] = Convert.ToInt32(Console.ReadLine());
+foreach (int elem in list)
+{
+    if (elem < 0)
+        if (elem.ToString()[elem.ToString().Length - 1] == '3') imeetsya = true;
+}
+if (imeetsya) Console.WriteLine("Имеется");
+else Console.WriteLine("Не имеется");

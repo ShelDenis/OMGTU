@@ -1,0 +1,32 @@
+int n = Convert.ToInt32(Console.ReadLine());
+int k = Convert.ToInt32(Console.ReadLine());
+int white_pos = Convert.ToInt32(Console.ReadLine());
+
+int[] mice = new int[n];
+
+for (int i = 0; i < n; i++) mice[i] = 1;
+
+int ind = 0;
+int ind_alive = 0, kr = 1;
+while (true)
+{
+    if (mice[ind] == 1 && kr == k)
+    {
+        mice[ind] = 0;
+        kr = 0;
+    }
+    ind++;
+    if (ind >= n) ind %= n;
+    if (mice[ind] == 1) kr++;
+    if (kr > k) kr = k;
+
+    if (mice.Sum() == 1)
+    {
+        ind_alive = Array.IndexOf(mice, 1);
+        break;
+    }
+}
+
+int position_to_be_alive = white_pos - ind_alive;
+if (position_to_be_alive <= 0) position_to_be_alive = n + position_to_be_alive - 1;
+Console.WriteLine(position_to_be_alive);

@@ -1,0 +1,102 @@
+//образование ступенчатого массива
+int n_sets = Convert.ToInt32(Console.ReadLine());
+int[][] sets = new int[n_sets][];
+int universum_len = 0;
+for (int i = 0; i < n_sets; i++)
+{
+    int n = Convert.ToInt32(Console.ReadLine());
+    universum_len += n;
+    int[] set = new int[n];
+    for (int j = 0; j < n; j++)
+        set[j] = Convert.ToInt32(Console.ReadLine());
+    sets[i] = set;
+}
+
+// создание универсального множества
+int[] universum = new int[universum_len];
+int index = 0;
+for (int i = 0; i < sets.Length; i++)
+    for (int j = 0; j < sets[i].Length; j++)
+    {
+        universum[index] = sets[i][j];
+        index++;
+    }
+
+// подготовительная часть для поиска мощности мн-ва объединения
+int mx = universum.Max();
+int mn = universum.Min();
+int len_nums = mx - mn + 2;
+int[] nums = new int[len_nums];
+for (int i = mn; i < len_nums; i++)
+    nums[i] = i;
+
+
+// поиск мощности множества объединения
+int len_obedinenie = 0;
+foreach (int elem in nums)
+{
+    if (universum.Contains(elem))
+        len_obedinenie++;
+}
+
+// образование множества объединения
+int[] obedinenie = new int[len_obedinenie];
+int ind = 0;
+foreach (int elem in universum)
+{
+    if (!obedinenie.Contains(elem))
+    {
+        obedinenie[ind] = elem;
+        ind++;
+    }
+}
+
+//обработка элементов множеств (для нахождения пересечения)
+// поиск мощности множества пересечения
+int n_peresech = 0;
+foreach (int elem in obedinenie)
+{
+    bool in_all = true;
+    for (int i = 0; i < sets.Length; i++)
+    {
+        if (!sets[i].Contains(elem))
+            in_all = false;
+    }
+    if (in_all) n_peresech++;
+}
+
+//  образование множества пересечения
+int[] peresechenie = new int[n_peresech];
+ind = 0;
+foreach (int elem in obedinenie)
+{
+    bool in_all = true;
+    for (int i = 0; i < sets.Length; i++)
+    {
+        if (!sets[i].Contains(elem))
+            in_all = false;
+    }
+    if (in_all)
+    {
+        peresechenie[ind] = elem;
+        ind++;
+    }
+}
+
+// поиск макс. элементов множеств
+int[] maxes = new int[n_sets];
+for (int i = 0; i < n_sets; i++)
+{
+    maxes[i] = sets[i].Max();
+}
+
+// вывод
+Console.WriteLine("Пересечение");
+foreach (int elem in peresechenie)
+    Console.Write(elem + " ");
+Console.WriteLine("\nОбъединение");
+foreach (int elem in obedinenie)
+    Console.Write(elem + " ");
+Console.WriteLine("\nМаксимумы");
+foreach (int elem in maxes)
+    Console.Write(elem + " ");

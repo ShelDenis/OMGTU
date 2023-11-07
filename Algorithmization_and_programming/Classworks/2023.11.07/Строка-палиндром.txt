@@ -1,0 +1,35 @@
+string str = Console.ReadLine();
+string chet_nums = "02468";
+int summa = 0;
+foreach (char c in str)
+{
+    if (chet_nums.Contains(c))
+        summa += Convert.ToInt32(c.ToString());
+}
+Console.WriteLine($"Сумма четных цифр = {summa}");
+
+str = str.ToLower();
+int spaces = 0;
+foreach (char c in str)
+    if (c == ' ') spaces++;
+
+int len_without_spaces = str.Length - spaces;
+char[] str_without_spaces = new char[len_without_spaces];
+int ind = 0;
+for (int i = 0; i < str.Length; i++)
+{
+    if (str[i] != ' ')
+    {
+        str_without_spaces[ind] = str[i];
+        ind++;
+    }
+}
+string new_str = string.Join("", str_without_spaces);
+bool is_palindrome = true;
+for (int i = 0; i < new_str.Length; i++)
+{
+    if (new_str[i] != new_str[new_str.Length - i - 1])
+        is_palindrome = false;
+}
+if (is_palindrome) Console.WriteLine("Является палиндромом");
+else Console.WriteLine("Не является палиндромом");

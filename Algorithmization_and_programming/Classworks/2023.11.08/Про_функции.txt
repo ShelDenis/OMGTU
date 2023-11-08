@@ -13,7 +13,7 @@ void full_array(int[,] ar)
 
 int get_min(int[] line_of_nums)
 {
-    int mn = 10000000;
+    int mn = line_of_nums[0];
     foreach (int elem in line_of_nums)
         if (elem < mn)
             mn = elem;
@@ -22,7 +22,7 @@ int get_min(int[] line_of_nums)
 
 int get_max(int[] line_of_nums)
 {
-    int mx = -1000000;
+    int mx = line_of_nums[0];
     foreach (int elem in line_of_nums)
         if (elem > mx)
             mx = elem;

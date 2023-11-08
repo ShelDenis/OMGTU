@@ -1,0 +1,50 @@
+void full_array(int[,] ar)
+{
+    int m = ar.GetLength(0);
+    int n = ar.Length / m;
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            ar[i, j] = Convert.ToInt32(Console.ReadLine());
+        }
+    }
+}
+
+int get_min(int[] line_of_nums)
+{
+    int mn = 10000000;
+    foreach (int elem in line_of_nums)
+        if (elem < mn)
+            mn = elem;
+    return mn;
+}
+
+int get_max(int[] line_of_nums)
+{
+    int mx = -1000000;
+    foreach (int elem in line_of_nums)
+        if (elem > mx)
+            mx = elem;
+    return mx;
+}
+
+int width  = Convert.ToInt32(Console.ReadLine());
+int heigth = Convert.ToInt32(Console.ReadLine());
+int count = 0;
+int[,] array = new int[width, heigth];
+full_array(array);
+
+for (int i = 0; i < width; i++)
+{
+    int[] line = new int[heigth];
+    for (int j = 0; j < heigth; j++)
+    {
+        line[j] = array[i, j];
+    }
+    int min = get_min(line);
+    int max = get_max(line);
+    if (min % 2 == 0 && max % 2 == 0)
+        count++;
+}
+Console.WriteLine(count);

@@ -1,0 +1,69 @@
+public class Student
+{
+    string fio;
+    int birth_year;
+    string group;
+
+    public Student(string fio, int birth_year, string group) 
+    {
+        this.fio = fio;
+        this.birth_year = birth_year;
+        this.group = group;
+    }
+
+    public Student(string fio) 
+    {
+        this.fio = fio;
+        this.birth_year = 2000;
+        this.group = "?";
+    }
+
+    public string Fio
+    {
+        get { return this.fio; }
+        set { this.fio = value; }
+    }
+
+    public int BirthYear
+    {
+        get { return this.birth_year; }
+        set { this.birth_year = value; }
+    }
+
+    public string Group
+    {
+        get { return this.group; }
+        set { this.group = value; }
+    }
+
+    public void ThisYear(int year)
+    {
+        if (this.birth_year == year)
+            Console.WriteLine($"Студент {this.fio} появился на свет в {this.birth_year} году");
+        else Console.WriteLine($"Студент {this.fio} появился на свет не в {year} году, а в {this.birth_year} году");
+    }
+
+    public void ThisGroup(string gr)
+    {
+        if (this.group == gr)
+            Console.WriteLine($"Студент {this.fio} состоит в группе {this.group}");
+        else Console.WriteLine($"Студент {this.fio} не состоит в группе {gr}, он в группе {this.group}");
+    }
+
+}
+
+static void Main(string[] args)
+{
+    Student[] students = new Student[6];
+    students[0] = new Student("Сабенин Марк", 2005, "ФИТ-231");
+    students[1] = new Student("Шелепов Денис", 2005, "ФИТ-231");
+    students[2] = new Student("Мельников Максим", 2005, "ФИТ-231");
+    students[3] = new Student("Беребердин Никита", 2005, "БИТ-231");
+    students[4] = new Student("Шпис Дима", 2004, "ПИ-232");
+    students[5] = new Student("Казимирская Ирина");
+
+    foreach (Student st in students)
+    {
+        st.ThisYear(2005);
+        st.ThisGroup("ФИТ-231");
+    }

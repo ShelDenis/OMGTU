@@ -68,6 +68,3 @@ static void Main(string[] args)
         st.ThisGroup("ФИТ-231");
     }
 }
-        st.ThisYear(2005);
-        st.ThisGroup("ФИТ-231");
-    }

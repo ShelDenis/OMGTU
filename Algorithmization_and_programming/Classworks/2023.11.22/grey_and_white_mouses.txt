@@ -1,0 +1,78 @@
+static void Main(string[] args)
+{
+    int n = Convert.ToInt32(Console.ReadLine());
+    int m = Convert.ToInt32(Console.ReadLine());
+    int k = Convert.ToInt32(Console.ReadLine());
+    int n1 = Convert.ToInt32(Console.ReadLine());
+    int m1 = Convert.ToInt32(Console.ReadLine());
+
+    bool flag = true;
+    if (n1 > n || m1 > m || n1 == 0 || n == 0) flag = false;
+
+    if (flag)
+    {
+        int[] mice = new int[n + m];
+
+        for (int i = 0; i < n + m; i++) mice[i] = 1;
+
+        int ind = 1;
+        int kr = 1;
+        while (true)
+        {
+            if (mice[ind] == 1 && kr == k)
+            {
+                mice[ind] = 0;
+                kr = 0;
+            }
+            ind++;
+            if (ind >= n + m) ind %= n + m;
+            if (mice[ind] == 1) kr++;
+            if (kr > k) kr = k;
+
+            if (mice.Sum() == n1 + m1)
+            {
+                break;
+            }
+        }
+
+        int grey_0 = 0, grey_1 = 0;
+        int white_0 = 0, white_1 = 0;
+        Console.Write("С");
+        if (mice[0] == 0)
+            grey_0++;
+        else grey_1++;
+
+        for (int i = 1; i < mice.Length; i++)
+        {
+            if (mice[i] == 0)
+            {
+                if (grey_0 < n - n1)
+                {
+                    Console.Write("С");
+                    grey_0++;
+                }
+                else if (white_0 < m - m1)
+                {
+                    Console.Write("Б");
+                    white_0++;
+                }
+            }
+            else
+            {
+                if (grey_1 < n1)
+                {
+                    Console.Write("С");
+                    grey_1++;
+                }
+                else if (white_1 < m1)
+                {
+                    Console.Write("Б");
+                    white_1++;
+                }
+            }
+        }
+    }
+    else
+        Console.Write("Невозможно расположить мышей");  
+    Console.ReadLine();
+    }

@@ -1,0 +1,128 @@
+class Car
+{
+    string name = "Unnamed";
+    int year = 2000;
+    string color = "white";
+    string[] owners;
+    int[] teh_osmotr_years;
+    public Car(string name, int year,
+        string color, string[] owners, int[] teh_osmotr_years) 
+    {
+        this.name = name;
+        this.color = color;
+        this.owners = owners;
+        this.year = year;
+        this.teh_osmotr_years = teh_osmotr_years;
+    }
+
+    public string Name
+    {get => name; set => name = value;}
+    public int Year
+    { get => year; set => year = value;}
+    public string Color
+    { get => color; set => color = value;}
+    public string[] Owners
+    { get => owners; set => owners = value; }
+    public int[] TehOsmotrYears
+    { get => teh_osmotr_years; set => teh_osmotr_years = value; }
+
+    public void print()
+    {
+        Console.WriteLine($"\nАвтомобиль марки {this.name}");
+        Console.WriteLine($"{this.year} года выпуска");
+        Console.WriteLine($"Цвет: {this.color}");
+        Console.WriteLine($"Нынешний владелец - {this.last_owner()}");
+        Console.WriteLine($"Последний техосмотр в {this.teh_osmotr_years[teh_osmotr_years.Length-1]} году");
+    } 
+    public bool made_in_year(int y)
+    {
+        if (this.year == y)
+        {
+            print();
+            return true;
+        }
+        return false;
+    }
+
+    public bool teh_osmotr_in_year(int y)
+    {
+        foreach (int date in this.teh_osmotr_years)
+        {
+            if (date == y)
+            {
+                print();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public string last_owner()
+    {
+        return this.owners[this.owners.Length - 1];
+    }
+}
+
+static void Main(string[] args)
+{
+    Car[] data = new Car[4];
+    data[0] = new Car("Toyota Corolla", 2005, "красный",
+        new string[] { "Кирилл", "Женя" }, new int[] { 2010, 2012 });
+    data[1] = new Car("Lada Priora", 2009, "баклажан",
+        new string[] { "Саня", "Игорек" }, new int[] { 2009, 2012 });
+    data[2] = new Car("Mercedes-benz w124", 2005, "черный",
+        new string[] { "Владимир", "Анатолий", "Жанна" }, new int[] { 2010, 2017, 2023 });
+    data[3] = new Car("Bat mobile", 1985, "черный",
+        new string[] { "Бэтмен" }, new int[] { 1985 });
+
+    Console.WriteLine("Что изволите узнать?");
+    Console.WriteLine("1) Машины, сделанные в заданном году");
+    Console.WriteLine("2) Машины, осмотренные в заданном году");
+    Console.WriteLine("3) Нынешних владельцев всех машин");
+    Console.WriteLine("4) Выход из программы");
+    while (true)
+    {
+        int num = Convert.ToInt32(Console.ReadLine());
+        if (num == 1)
+        {
+            bool flag = false;
+            Console.WriteLine("Введите год выпуска машины");
+            int date = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine($"Машины, произведенные в {date} году:");
+            foreach (Car car in data)
+            {
+                if (car.made_in_year(date)) flag = true;
+            }
+            if (!flag) Console.WriteLine("Ничего не найдено!");
+        }
+        else if (num == 2)
+        {
+            bool flag = false;
+            Console.WriteLine("\nВведите год тех.осмотра машины");
+            int date = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine($"Машины, осмотренные в {date} году:");
+            foreach (Car car in data)
+            {
+                if (car.teh_osmotr_in_year(date)) flag = true;
+            }
+            if (!flag) Console.WriteLine("Ничего не найдено!");
+        }
+        else if (num == 3)
+        {
+            foreach (Car car in data)
+            {
+                Console.WriteLine(car.Name + " - " + car.last_owner());
+            }
+        }
+        else if (num == 4)
+        {
+            Console.WriteLine("До новых встреч!");
+            break;
+        }
+        else
+        {
+            Console.WriteLine("Некорректный ввод!");
+        }
+        Console.WriteLine("\nЧто-нибудь еще?)");
+    }
+}

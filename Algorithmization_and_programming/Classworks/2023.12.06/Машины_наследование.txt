@@ -1,0 +1,193 @@
+class Car
+{
+    string name = "Unnamed";
+    string number = "а000аа-55";
+    int year = 2000;
+    int[] teh_osmotr_years;
+    public Car(string name, string number, int year, int[] teh_osmotr_years) 
+    {
+        this.name = name;
+        this.number = number;
+        this.year = year;
+        this.teh_osmotr_years = teh_osmotr_years;
+    }
+
+    public string Name
+    {get => name; set => name = value;}
+    public string Number
+    { get => number; set => number = value; }
+    public int Year
+    { get => year; set => year = value; }
+    public int[] TehOsmotrYears
+    { get => teh_osmotr_years; set => teh_osmotr_years = value; }
+
+}
+
+class PassengerCar: Car
+{
+    string body_type;
+    int power;
+    public PassengerCar(string name, string number, int year, int[] teh_osmotr_years,
+        string body_type, int power): base(name, number, year, teh_osmotr_years)
+    {
+        this.body_type = body_type;
+        this.power = power;
+    }
+
+    public string BodyType
+    { get => body_type; set => body_type = value; }
+    public int Power
+    { get => power; set => power = value; }
+
+    public bool this_body_type(string body)
+    {
+        if (body == this.body_type) return true;
+        return false;
+    }
+
+    public void print()
+    {
+        Console.WriteLine($"\nЛегковой автомобиль марки {this.Name} №{this.Number}");
+        Console.WriteLine($"С кузовом {this.body_type}");
+        Console.WriteLine($"Мощности {this.power} л.с.");
+        Console.WriteLine($"{this.Year} года выпуска");
+        Console.WriteLine($"Последний тех. осмотр в {this.TehOsmotrYears[TehOsmotrYears.Length - 1]} году");
+    }
+}
+
+class Truck: Car
+{
+    int tonnage;
+    public Truck(string name, string number, int year, int[] teh_osmotr_years,
+        int tonnage) : base(name, number, year, teh_osmotr_years)
+    {
+        this.tonnage = tonnage;
+    }
+    public int Tonnage
+    { get => tonnage; set => tonnage = value; }
+
+    public void print()
+    {
+        Console.WriteLine($"\nГрузовой автомобиль марки {this.Name} №{this.Number}");
+        Console.WriteLine($"Грузоподъемности {this.tonnage} тонн");
+        Console.WriteLine($"{this.Year} года выпуска");
+        Console.WriteLine($"Последний тех. осмотр в {this.TehOsmotrYears[TehOsmotrYears.Length - 1]} году");
+    }
+}
+
+static void Main(string[] args)
+{
+    PassengerCar[] pass_cars = new PassengerCar[3];
+    pass_cars[0] = new PassengerCar("Toyota Corolla", "р538ои-55", 2003,
+        new int[2] { 2006, 2009 }, "хэтчбек", 192);
+    pass_cars[1] = new PassengerCar("Бэт-мобиль", "black-55", 1985,
+        new int[1] { 1985 }, "хэтчбек", 1000);
+    pass_cars[2] = new PassengerCar("УАЗ Бобик", "р789ус-55", 1990,
+        new int[3] { 2001, 2010, 2016}, "универсал", 112);
+
+    Truck[] trucks = new Truck[3];
+    trucks[0] = new Truck("Газель", "в129аи-55", 2004, new int[2] { 2008, 2015 }, 2);
+    trucks[1] = new Truck("ЗиЛ", "к876ир-55", 1982, new int[2] { 1995, 2020 }, 5);
+    trucks[2] = new Truck("КамАЗ", "о421пр-55", 2010, new int[1] { 2018 }, 10);
+
+    Console.WriteLine("Что изволите узнать?");
+    Console.WriteLine("1) Легковые машины, с определенным типом кузова");
+    Console.WriteLine("2) Наилучший способ перевозки груза грузовиками из нашего гаража");
+    Console.WriteLine("3) По номеру вывести тип машины");
+    Console.WriteLine("4) Выход из программы");
+    while (true)
+    {
+        int num = Convert.ToInt32(Console.ReadLine());
+        if (num == 1)
+        {
+            Console.WriteLine("Введите тип кузова");
+            string kuzov = Console.ReadLine();
+            Console.WriteLine($"Легковушки с кузовом {kuzov}");
+            bool flag = false;
+            foreach (PassengerCar pc in pass_cars)
+            {
+                if (pc.this_body_type(kuzov))
+                {
+                    pc.print();
+                    flag = true;
+                } 
+            }
+            if (!flag) Console.WriteLine("Ничего не найдено!");
+        }
+        else if (num == 2)
+        {
+            Console.WriteLine("Введите массу груза в тоннах");
+            int m = Convert.ToInt32(Console.ReadLine());
+            bool flag_1 = false;
+            
+            foreach (Truck t in trucks)
+            {
+                if (t.Tonnage >= m)
+                {
+                    t.print();
+                    flag_1 = true;
+                    break;
+                }
+            }
+            if (!flag_1)
+            {
+                bool flag_2 = false;
+                int truck_mass = trucks[trucks.Length - 1].Tonnage;
+                for (int i = 0; i < trucks.Length - 1; i++)
+                {
+                    if (truck_mass + trucks[i].Tonnage >= m)
+                    {
+                        trucks[trucks.Length - 1].print();
+                        trucks[i].print();
+                        flag_2 = true;
+                        break;
+                    }
+                }
+                if (!flag_2)
+                {
+                    int all_m = 0;
+                    foreach (Truck t in trucks)
+                    {
+                        all_m += t.Tonnage;
+                    }
+                    if (all_m >= m)
+                    {
+                        foreach (Truck t in trucks) t.print();
+                    }
+                    else Console.WriteLine("Груз слишком тяжелый. Грузовиков гаража не хватит");
+                }
+            }
+        }
+        else if (num == 3)
+        {
+            Console.WriteLine("Введите номер авто");
+            string nomer = Console.ReadLine();
+            bool flag = false;
+            foreach (PassengerCar p_c in pass_cars)
+            {
+                if (p_c.Number == nomer)
+                {
+                    Console.WriteLine($"Это легковой автомобиль {p_c.Name}");
+                    flag = true;
+                }
+            }
+            foreach (Truck t in trucks)
+            {
+                if (t.Number == nomer)
+                {
+                    Console.WriteLine($"Это грузовик {t.Name}");
+                    flag = true;
+                }
+            }
+            if (!flag) Console.WriteLine("Ничего не найдено!");
+        }
+        else if (num == 4)
+        {
+            Console.WriteLine("До новых встреч!");
+            break;
+        }
+        else Console.WriteLine("Некорректный ввод!");
+        Console.WriteLine("Что-нибудь еще?");
+    }
+
+}

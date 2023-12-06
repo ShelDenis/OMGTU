@@ -1,0 +1,16 @@
+int n = Convert.ToInt32(Console.ReadLine());
+int t = Convert.ToInt32(Console.ReadLine());
+int up = Convert.ToInt32(Console.ReadLine());
+int down = t + Convert.ToInt32(Console.ReadLine());
+for (int i = 0; i < n - 1; i++)
+{
+    int a = Convert.ToInt32(Console.ReadLine());
+    int b = Convert.ToInt32(Console.ReadLine());
+    if (up + t < down)
+        down = up + t + b;
+    else
+        down += b;
+    up += a;
+    
+}
+Console.WriteLine(Math.Min(down, up + t));

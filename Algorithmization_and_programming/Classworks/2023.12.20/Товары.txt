@@ -1,0 +1,142 @@
+class Item
+{
+    string name;
+    string unit;
+    int quantity;
+
+    public Item()
+    {
+        this.name = "Что-то";
+        this.unit = "В чём-то";
+        this.quantity = 0;
+    }
+
+    public Item(string name, string unit, int quantity)
+    {
+        this.name = name;
+        this.unit = unit;
+        this.quantity = quantity;
+    }
+
+    public string Name
+    { get => name; set => name = value; }
+
+    public string Unit
+    { get => unit; set => unit = value; }
+
+    public int Quantity
+    { get => quantity; set => quantity = value; }
+}
+
+class Product : Item
+{
+    int days_to_end;
+    int calories;
+    int proteins, fats, carbohydrates;
+
+    public Product(string name, string unit, int quantity,
+        int days_to_end, int calories, int proteins, int fats, int carbohydrates) :
+        base(name, unit, quantity)
+    {
+        this.days_to_end = days_to_end;
+        this.calories = calories;
+        this.proteins = proteins;
+        this.fats = fats;
+        this.carbohydrates = carbohydrates;
+    }
+
+    public int DaysToEnd
+    { get => days_to_end; set => days_to_end = value; }
+
+    public int Calories
+    { get => calories; set => calories = value; }
+
+    public int Proteins
+    { get => proteins; set => proteins = value; }
+
+    public int Fats
+    { get => fats; set => fats = value; }
+
+    public int Carbohydrates
+    { get => carbohydrates; set => carbohydrates = value; }
+
+    public void print()
+    {
+        Console.WriteLine($"Продукт {this.Name} ({this.Unit}) {this.Quantity} руб.");
+        Console.WriteLine($"Срок годности: {this.days_to_end} дней");
+        Console.WriteLine($"{this.calories} калорий");
+        Console.WriteLine($"Состав: белки - {this.proteins}, жиры - {this.fats}, углеводы - {this.carbohydrates}\n");
+    }
+}
+
+class BuildMaters: Item
+{
+    string kind;
+
+    public BuildMaters(string name, string unit, int quantity, string kind) :
+        base(name, unit, quantity)
+    {
+        this.kind = kind;
+    }
+
+    public string Kind
+    {
+        get => kind;
+        set => kind = value;
+    }
+
+    public void print()
+    {
+        Console.WriteLine($"Продукт {this.Name} ({this.Unit}) {this.Quantity} руб.");
+        Console.WriteLine($"Вид материала: {this.Kind}\n");
+    }
+}
+
+
+static void Main(string[] args)
+{
+    Product[] products = new Product[4];
+    products[0] = new Product("Молоко", "мл", 40, 14, 160, 3, 3, 5);
+    products[1] = new Product("Макароны", "г", 50, 960, 162, 8, 6, 23);
+    products[2] = new Product("Чай", "пакетики", 69, 730, 17, 1, 1, 4);
+    products[3] = new Product("Пельмени", "г", 179, 60, 300, 12, 12, 30);
+
+    BuildMaters[] b_maters = new BuildMaters[4];
+    b_maters[0] = new BuildMaters("Гвозди", "шт", 99, "сталь");
+    b_maters[1] = new BuildMaters("Доски строительные", "м^2", 660, "сосна");
+    b_maters[2] = new BuildMaters("Уголок крепежный", "шт", 245, "сталь");
+    b_maters[3] = new BuildMaters("Линолеум", "м^2", 300, "полимеры");
+
+    while (true)
+    {
+        Console.WriteLine("Введите название товара:");
+        string name = Console.ReadLine();
+        if (name == "Выход")
+        {
+            Console.WriteLine("До новых встреч!");
+            break;
+        }
+        bool flag = false;
+        foreach (Product pr in products)
+        {
+            if (pr.Name == name)
+            {
+                flag = true;
+                pr.print();
+            }
+        }
+
+        foreach (BuildMaters bm in b_maters)
+        {
+            if (bm.Name == name)
+            {
+                flag = true;
+                bm.print();
+            }
+        }
+        if (!flag)
+            Console.WriteLine("Ничего не найдено!\n");
+        Console.WriteLine("Что-нибудь ещё?\n");
+    }
+
+}

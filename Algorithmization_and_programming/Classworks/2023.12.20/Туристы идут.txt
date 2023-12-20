@@ -1,0 +1,78 @@
+static void Main(string[] args)
+{
+    bool error = false;
+    int way_length = Convert.ToInt32(Console.ReadLine());
+    int n = Convert.ToInt32(Console.ReadLine());
+    double[] rest_points = new double[n + 1];
+    for (int i = 0; i < n; i++)
+    {
+        rest_points[i] = Convert.ToDouble(Console.ReadLine());
+        if (rest_points[i] <= 0)
+            error = true;
+    }
+    rest_points[n] = way_length;
+
+    double v = Convert.ToDouble(Console.ReadLine());
+    int sunrise_h = Convert.ToInt32(Console.ReadLine());
+    int sunrise_m = Convert.ToInt32(Console.ReadLine());
+    int sunset_h = Convert.ToInt32(Console.ReadLine());
+    int sunset_m = Convert.ToInt32(Console.ReadLine());
+
+    double sunrise_time = sunrise_h * 60 + sunrise_m;
+    double sunset_time = sunset_h * 60 + sunset_m;
+
+    v /= 60;
+    double current_point = 0, days = 0;
+
+    bool can_go = true;
+    //if (n == 0)
+    //    can_go = false;
+    if (way_length <= 0)
+        error = true;
+    for (int i = 0; i < rest_points.Length - 1; i++)
+    {
+        if ((rest_points[i + 1] - rest_points[i]) / v > sunset_time - sunrise_time)
+            can_go = false;
+        
+    }
+    if (can_go && !error)
+    {
+        if (sunrise_time + way_length / v <= sunset_time)
+            Console.WriteLine("В один день без отдыха");
+        else if (n == 0)
+            can_go = false;
+        else
+        {
+            bool go = true;
+            while (go)
+            {
+                for (int i = rest_points.Length - 1; i > -1; i--)
+                {
+                    if (sunrise_time + (rest_points[i] - current_point) / v <= sunset_time)
+                    {
+                        current_point = rest_points[i];
+                        days++;
+                        Console.WriteLine($"День {days}");
+                        if (current_point == way_length)
+                        {
+                            Console.WriteLine("Ура, дошли!");
+                            go = false;
+                        }
+                        else
+                            Console.WriteLine($"Прошли пункт №{i + 1}");
+                        break;
+                    }
+                }
+
+            }
+        }
+    }
+    if (error)
+        Console.WriteLine("Некорректный ввод!");
+    else
+        if (!can_go)
+            Console.WriteLine("Не дойдём...");
+    
+
+    Console.ReadLine();
+}

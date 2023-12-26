@@ -1,0 +1,114 @@
+using System;
+using System.Linq;
+
+namespace First
+{
+    internal class Program
+    {
+   
+        static void Main(string[] args)
+        {
+            string[] words =
+            {
+                "ТЕЛЕВИЗОР", "СОЛНЦЕ", "СНЕГОВИК", "БИЕКЦИЯ",
+                "МАТРИЦА", "БАБОЧКА", "ПРИЗРАК", "ЗАВТРАК",
+                "ЭЛЛИПС", "ФУНКЦИЯ", "ИНТЕГРАЛ", "МАГАЗИН",
+                "КАКТУС", "ГИРЛЯНДА", "ДРАКОН", "ТРАМВАЙ",
+                "СНЕГИРЬ", "ПРОСПЕКТ", "ПРАЗДНИК", "СЕРДЦЕ",
+                "КАПИБАРА", "КРЕПОСТЬ", "АВОКАДО", "ГЕОМЕТРИЯ"
+            };
+
+            void print_res(string w, int[] inds)
+            {
+                for (int i = 0; i < inds.Length; i++)
+                {
+                    if (inds[i] == 1)
+                    {
+                        if (i != w.Length - 1)
+                            Console.Write(w[i] + " ");
+                        else
+                            Console.Write(w[i] + "\n");
+                    }
+                    else
+                    {
+                        if (i != w.Length - 1)
+                            Console.Write("_ ");
+                        else
+                            Console.Write("_\n");
+                    }
+                }
+            }
+
+            bool check_all_guessed(int[] inds)
+            {
+                if (inds.Sum() == inds.Length)
+                    return true;
+                return false;
+            }
+
+            int score = 15;
+            int rand_index = new Random().Next(words.Length);
+            string word = words[rand_index];
+
+            int[] guessed_inds = new int[word.Length];
+            for (int i = 0; i < guessed_inds.Length; i++)
+                guessed_inds[i] = 0;
+
+            Console.WriteLine("Угадай слово!");
+
+            while (!check_all_guessed(guessed_inds))
+            {
+                print_res(word, guessed_inds);
+                Console.WriteLine("Угадай букву!");
+                string letter = Console.ReadLine();
+                if (word.Contains(letter.ToUpper()))
+                {
+                    bool no_let = true;
+                    for (int i = 0; i < guessed_inds.Length; i++)
+                    {
+                        if (word[i].ToString() == letter.ToUpper())
+                        {
+                            if (guessed_inds[i] == 0)
+                            {
+                                guessed_inds[i] = 1;
+                            }
+                            else
+                            {
+                                no_let = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (!no_let)
+                    {
+                        Console.WriteLine($"Буква {letter.ToUpper()} уже отгадана!");
+                        score--;
+                    }
+                    else
+                        Console.WriteLine($"Откройте букву {letter.ToUpper()}!");
+                }
+                else
+                {
+                    score--;
+                    Console.WriteLine("Нет такой буквы!");
+                }
+                if (score == 0)
+                {
+                    Console.WriteLine($"Вы проиграли! Слово: {word}");
+                    Console.WriteLine("У Вас осталось 0 очков, совершено 15 ошибок.");
+                    break;
+                }
+
+            }
+            if (check_all_guessed(guessed_inds))
+            {
+                Console.WriteLine($"Вы выиграли! Слово: {word}");
+                Console.WriteLine($"У Вас осталось {score} из 15 очков (совершено {15 - score} ошибок)");
+            }
+            
+
+            Console.ReadLine();
+        }
+
+    }
+}

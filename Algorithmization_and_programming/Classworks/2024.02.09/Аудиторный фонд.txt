@@ -1,0 +1,407 @@
+using System;
+using System.Collections.Generic;
+
+namespace First
+{
+    internal class Program
+    {
+        class Auditoria
+        {
+            int n_places;
+            bool has_projector;
+            int n_comps;
+            int corpus, floor, number;
+
+            public Auditoria(int corpus_num, int floor_num, int aud_number, int n_places, bool has_projector, int n_comps)
+            {
+                this.n_places = n_places;
+                this.has_projector = has_projector;
+                this.n_comps = n_comps;
+                this.corpus = corpus_num;
+                this.floor = floor_num;
+                this.number = aud_number;                
+            }
+
+            public int NPlaces {  get => n_places;  set => n_places = value; }
+
+            public bool HasProjector { get => has_projector; set => has_projector = value; }
+            public int NComps { get => n_comps; set => n_comps = value; }
+
+            public int Corpus { get => corpus; set => corpus = value; }
+            public int Floor { get => floor; set => floor = value; }
+            public int Number { get => number; set => number = value; }
+
+            public bool ChoosePlaces(int places)
+            {
+                if (NPlaces >= places)
+                    return true;
+                return false;
+            }
+
+            public bool ChooseComps(int comps)
+            {
+                if (NComps >= comps)
+                    return true;
+                return false;
+            }
+
+            public bool ChooseCompsOnFloor(int c, int f, int comps)
+            {
+                if (Floor == f && Corpus == c)
+                {
+                    if (NComps >= comps)
+                        return true;
+                    return false;
+                }
+                return false;
+            }
+
+            public bool ChoosePlacesOnFloor(int c, int f, int places)
+            {
+                if (Floor == f && Corpus == c)
+                {
+                    if (NPlaces >= places)
+                        return true;
+                    return false;
+                }
+                return false;
+            }
+
+            public void print()
+            {
+                Console.WriteLine($"Корпус {corpus}, этаж {floor}, номер {number}");
+                Console.WriteLine($"Посадочных мест: {n_places}");
+                if (has_projector)
+                    Console.WriteLine("Оснащена проектором");
+                else
+                    Console.WriteLine("Не оснащена проектором");
+                if (n_comps > 0)
+                    Console.WriteLine($"Количество компьютеров: {n_comps}");
+                else
+                    Console.WriteLine("Не оснащена компьютерами");
+                Console.WriteLine();
+            }
+        }
+
+
+        class Menu
+        {
+            
+
+            public void showMenu()
+            {
+                Console.WriteLine("МЕНЮ:");
+                Console.WriteLine("1) Создать базу аудиторного фонда");
+                Console.WriteLine("2) Дополнить базу аудиторного фонда");
+                Console.WriteLine("3) Выбрать аудитории по количеству посадочных мест");
+                Console.WriteLine("4) Выбрать аудитории по количеству компьютеров");
+                Console.WriteLine("5) Выбрать аудитории по количеству компьютеров в данном корпусе и этаже");
+                Console.WriteLine("6) Выбрать аудитории по количеству посадочных мест в данном корпусе и этаже");
+                Console.WriteLine("7) Изменить данные аудитории");
+                Console.WriteLine("8) Вывод всех данных об аудиториях");
+                Console.WriteLine("9) Выход");
+            }
+
+            bool more_then_one(ref List<Auditoria> auds, int cor, int fl, int num)
+            {
+                int count = 0;
+                foreach (Auditoria a in auds)
+                {
+                    if (a.Corpus == cor && a.Floor == fl && a.Number == num)
+                        count++;
+                    if (count == 1)
+                        return true;
+                }
+                return false;
+            }
+
+            void tell_make_data(ref List<Auditoria> auds, bool is_add, int ind)
+            {
+                try
+                {
+                    while (true)
+                    {
+                        Console.Write("Корпус: ");
+                        int cor = Convert.ToInt32(Console.ReadLine());
+                        Console.Write("Этаж: ");
+                        int fl = Convert.ToInt32(Console.ReadLine());
+                        Console.Write("Номер: ");
+                        int num = Convert.ToInt32(Console.ReadLine());
+                        if (is_add) if (more_then_one(ref auds, cor, fl, num))
+                        {
+                            Console.WriteLine("Такая аудитория уже есть");
+                            continue;
+                        }
+                        Console.Write("Количество посадочных мест: ");
+                        int pl = Convert.ToInt32(Console.ReadLine());
+                        Console.Write("Есть ли проектор? (да-нет) ");
+                        string pj = Console.ReadLine();
+                        bool pj_bool;
+                        if (pj == "да")
+                            pj_bool = true;
+                        else if (pj == "нет")
+                            pj_bool = false;
+                        else
+                        {
+                            Console.WriteLine("Так да или нет???");
+                            Console.WriteLine("Введите данные об этой аудитории еще раз");
+                            continue;
+                        }
+                        Console.Write("Количество компьютеров: ");
+                        int pc = Convert.ToInt32(Console.ReadLine());
+                        if (cor <= 0 || num < 0 || pl < 0 || pc < 0 || fl < 1 || fl > 9 || num > 99)
+                        {
+                            Console.WriteLine("Отрицательное значение недопустимо");
+                            Console.WriteLine("Введите данные об этой аудитории еще раз");
+                            continue;
+                        }
+                        if (is_add)
+                        {
+                            auds.Add(new Auditoria(cor, fl, num, pl, pj_bool, pc));
+                            Console.WriteLine("Добавлена!\n");
+                            break;
+                        }
+                        else
+                        {
+                            auds[ind] = new Auditoria(cor, fl, num, pl, pj_bool, pc);
+                            Console.WriteLine("Добавлена!\n");
+                            break;
+                        }
+                    }
+                }
+                catch (InvalidCastException)
+                {
+                    Console.WriteLine("Данные не соответствуют типу");
+                }
+                }
+
+            public void makeData(ref List<Auditoria> auds)
+            {
+                Console.WriteLine("Введите число аудиторий");
+                try
+                {
+                    int n = Convert.ToInt32(Console.ReadLine());
+                    if (n < 0) throw new Exception();
+                    for (int _ = 0; _ < n; _++)
+                    {
+                        tell_make_data(ref auds, true, 0);
+                    }
+                }
+                catch 
+                {
+                    Console.WriteLine("Ошибка!");
+                }
+                
+            }
+
+            public void addData(ref List<Auditoria> auds)
+            {
+                Console.WriteLine("Введите число аудиторий");
+                try
+                {
+                    int n = Convert.ToInt32(Console.ReadLine());
+                    if (n < 0) throw new Exception();
+                    for (int _ = 0; _ < n; _++)
+                    {
+                        tell_make_data(ref auds, true, 0);
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("Ошибка!");
+                }
+            }
+
+            int findAudia(ref List<Auditoria> auds, int corp, int floor, int number)
+            {
+                for (int i = 0; i < auds.Count; i++)
+                {
+                    if (auds[i].Corpus == corp && auds[i].Floor == floor && auds[i].Number == number)
+                        return i;
+                }
+                return -1;
+            }
+            public void changeData(ref List<Auditoria> auds)
+            {
+                Console.WriteLine("Какую?");
+                Console.Write("Корпус: ");
+                int c = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Этаж: ");
+                int f = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Номер: ");
+                int num = Convert.ToInt32(Console.ReadLine());
+                int index = findAudia(ref auds, c, f, num);
+                if (index != -1)
+                {
+                    Console.WriteLine("Введите новые данные");
+                    tell_make_data(ref auds, false, index);
+                }
+                else
+                    Console.WriteLine("Аудитория не найдена!");
+            }
+
+            public void chooseAudsPlaces(ref List<Auditoria> auds)
+            {
+                Console.Write("Введите необходимое количество мест: ");
+                int count_places = Convert.ToInt32(Console.ReadLine());
+                bool ok = false;
+                if (count_places >= 0)
+                {
+                    foreach (Auditoria a in auds)
+                    {
+                        if (a.ChoosePlaces(count_places))
+                        {
+                            a.print();
+                            ok = true;
+                        }
+                    }
+                }
+                else
+                    Console.WriteLine("Отрицательное число мест!");
+                if (!ok)
+                    Console.WriteLine("Таких аудиторий не найдено!");
+            }
+
+            public void chooseAudsPC(ref List<Auditoria> auds)
+            {
+                Console.Write("Введите необходимое количество компьютеров: ");
+                int count_pcs = Convert.ToInt32(Console.ReadLine());
+                bool ok = false;
+                if (count_pcs >= 0)
+                {
+                    foreach (Auditoria a in auds)
+                    {
+                        if (a.ChooseComps(count_pcs))
+                        {
+                            a.print();
+                            ok = true;
+                        }
+                    }
+                }
+                else
+                    Console.WriteLine("Отрицательное число компьютеров!");
+                if (!ok)
+                    Console.WriteLine("Таких аудиторий не найдено!");
+
+            }
+
+            bool all_check(int c, int f, int cnt)
+            {
+                if (c > 0 && cnt >= 0 && f > 0 && f < 10)
+                    return true;
+                return false;
+            }
+
+            public void chooseAudsPCFloor(ref List<Auditoria> auds)
+            {
+                Console.Write("Введите корпус: ");
+                int corpus = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Введите этаж: ");
+                int floor = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Введите количество компьютеров: ");
+                int count_pcs = Convert.ToInt32(Console.ReadLine());
+                if (all_check(corpus, count_pcs, floor))
+                {
+                    bool ok = false;
+                    foreach (Auditoria a in auds)
+                    {
+                        if (a.ChooseCompsOnFloor(corpus, floor, count_pcs))
+                        {
+                            a.print();
+                            ok = true;
+                        }
+                    }
+                    if (!ok)
+                        Console.WriteLine("Таких аудиторий не найдено!");
+                }
+                else
+                    Console.WriteLine("Ошибка!");
+                
+            }
+
+            public void chooseAudsPlacesFloor(ref List<Auditoria> auds)
+            {
+                Console.Write("Введите корпус: ");
+                int corpus = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Введите этаж: ");
+                int floor = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Введите количество мест: ");
+                int count_places = Convert.ToInt32(Console.ReadLine());
+                if (all_check(corpus, count_places, floor))
+                {
+                    bool ok = false;
+                    foreach (Auditoria a in auds)
+                    {
+                        if (a.ChoosePlacesOnFloor(corpus, floor, count_places))
+                        {
+                            a.print();
+                            ok = true;
+                        }
+                    }
+                    if (!ok)
+                        Console.WriteLine("Таких аудиторий не найдено!");
+                }
+                else
+                    Console.WriteLine("Ошибка!");
+            }
+
+            public void getAllData(ref List<Auditoria> auds)
+            {
+                foreach (Auditoria a in auds)
+                    a.print();
+            }
+        }
+    
+        
+   
+        static void Main(string[] args)
+        {
+            List<Auditoria> audits = new List<Auditoria>();
+            ref List<Auditoria> a = ref audits;
+            Menu menu = new Menu();
+            menu.showMenu();
+
+            bool bue_bue = false;
+            
+                while (!bue_bue)
+                {
+                try
+                {
+                    string answer = Console.ReadLine();
+                    if (answer == "1")
+                        menu.makeData(ref a);
+                    else if (answer == "2")
+                        menu.addData(ref a);
+                    else if (answer == "3")
+                        menu.chooseAudsPlaces(ref a);
+                    else if (answer == "4")
+                        menu.chooseAudsPC(ref a);
+                    else if (answer == "5")
+                        menu.chooseAudsPCFloor(ref a);
+                    else if (answer == "6")
+                        menu.chooseAudsPlacesFloor(ref a);
+                    else if (answer == "7")
+                        menu.changeData(ref a);
+                    else if (answer == "8")
+                        menu.getAllData(ref a);
+                    else if (answer == "9")
+                    {
+                        Console.WriteLine("До новых встреч!");
+                        bue_bue = true;
+                    }
+                    else
+                        Console.WriteLine("Неправильный ввод!");
+                    menu.showMenu();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Ошибочка:\n{ex.Message}");
+                }
+            
+            }
+
+        }
+
+    }
+}
+

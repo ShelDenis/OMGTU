@@ -1,0 +1,413 @@
+static void Main(string[] args)
+{
+    void first_menu()
+    {
+        Console.WriteLine("Выберите коллекцию:");
+        Console.WriteLine("1) Array");
+        Console.WriteLine("2) ArrayList");
+        Console.WriteLine("3) SortedList");
+    }
+
+    void second_menu(int type)
+    {
+        Console.WriteLine();
+        switch (type) 
+        {
+            case 1:
+                Console.WriteLine("1) Count\n2) BinSearch\n3) Copy");
+                Console.WriteLine("4) Find\n5) FindLast\n6) indexOf");
+                Console.WriteLine("7) Reverse\n8) Resize\n9) Sort\n10) Выход");
+                break;
+            case 2:
+                Console.WriteLine("1) Count\n2) BinSearch\n3) Copy");
+                Console.WriteLine("4) IndexOf\n5) Insert\n6) Reverse");
+                Console.WriteLine("7) Sort\n8) Add\n9) Выход");
+                break;
+            case 3:
+                Console.WriteLine("1) Add\n2) IndexOfKey\n3) IndexOfValue");
+                Console.WriteLine("4) Вывод ключа по индексу" +
+                    "\n5) Вывод значения по индексу\n6) Выход");
+                break;
+        }
+    }
+
+    
+
+    bool correct_input(string input, int diap)
+    {
+        try
+        {
+            int answer = Convert.ToInt32(input);
+            if (answer > 0 && answer <= diap) 
+                return true;
+        }
+        catch 
+        {
+            Console.WriteLine("Некорректный ввод!");
+            return false;
+        }
+        return false;
+    }
+
+    int choose_method(int c_t)
+    {
+        bool okay = false;
+        second_menu(c_t);
+        Console.WriteLine("Выберите метод");
+        int method_type = 0;
+        while (!okay)
+        {
+            string ans = Console.ReadLine();
+            int d = 0;
+            switch (c_t)
+            {
+                case 1:
+                    d = 10;
+                    break;
+                case 2:
+                    d = 9;
+                    break;
+                case 3:
+                    d = 6;
+                    break;
+            }
+            if (correct_input(ans, d))
+            {
+                method_type = Convert.ToInt32(ans);
+                okay = true;
+            }
+            else
+                Console.WriteLine("Введите значение еще раз");
+        }
+        return method_type;
+    }
+
+    
+    bool ok = false;
+    int collect_type = 0;
+    first_menu();
+    while (!ok)
+    {
+        string ans = Console.ReadLine();
+        if (correct_input(ans, 3))
+        {
+            collect_type = Convert.ToInt32(ans);
+            ok = true;
+        }
+        else
+            Console.WriteLine("Введите значение еще раз");
+    }
+
+
+
+    if (collect_type == 1)
+    {
+        ok = false;
+        int len = 0;
+        while (!ok)
+        {
+            Console.Write("Введите длину массива: ");
+            try
+            {
+                len = Convert.ToInt32(Console.ReadLine());
+                if (len < 1) throw new Exception();
+                ok = true;
+            }
+            catch
+            {
+                Console.WriteLine("Введите целое положительное число");
+            }
+        }
+        string[] arr = new string[len];
+        Console.WriteLine("Заполните массив");
+        for (int i = 0; i < len; i++)
+        {
+            arr[i] = Console.ReadLine();
+        }
+
+        bool bue = false;
+        while (!bue)
+        {
+            int meth_t = choose_method(collect_type);
+            if (meth_t == 1)
+            {
+                Console.WriteLine($"Длина массива = {arr.Count()}");
+            }
+            if (meth_t == 2)
+            {
+                Console.Write("Что ищем? ");
+                string ob = Console.ReadLine();
+                int ind = Array.BinarySearch(arr, ob);
+                Console.WriteLine($"Элемент {ob} найден под индексом {ind}");
+            }
+            if (meth_t == 3)
+            {
+                Console.Write("Сколько первых элементов скопируем? ");
+                try
+                {
+                    int q = Convert.ToInt32(Console.ReadLine());
+                    if (q < 1) throw new Exception();
+                    string[] copyied_arr = new string[q];
+                    Array.Copy(arr, copyied_arr, q);
+                    Console.WriteLine("Скопировано! Новый массив:");
+                    foreach (string elem in copyied_arr)
+                        Console.WriteLine(elem);
+
+                }
+                catch
+                {
+                    Console.WriteLine("Ошибка!");
+                }
+            }
+            if (meth_t == 4)
+            {
+                string elem = Array.Find(arr, s => s[0] == 's');
+                if (elem == "")
+                    Console.WriteLine("Не найдено элементов, начинающихся на s");
+                else
+                    Console.Write($"Первый элемент, начинающийся на букву s - {elem}");
+            }
+
+            if (meth_t == 5)
+            {
+                string elem = Array.FindLast(arr, s => s[0] == 's');
+                if (elem == "")
+                    Console.WriteLine("Не найдено элементов, начинающихся на s");
+                else
+                    Console.Write($"Последний элемент, начинающийся на букву s - {elem}");
+            }
+
+            if (meth_t == 6)
+            {
+                Console.Write("Что ищем? ");
+                string word = Console.ReadLine();
+                int index = Array.IndexOf(arr, word);
+                Console.WriteLine($"Слово {word} найдено под индексом {index}");
+            }
+
+            if (meth_t == 7)
+            {
+                Array.Reverse(arr);
+                Console.WriteLine("Массив перевернут! Вот его элементы");
+                foreach (string elem in arr) Console.WriteLine(elem);
+            }
+
+            if (meth_t == 8)
+            {
+                Console.Write("Новый размер массива: ");
+                try
+                {
+                    int q = Convert.ToInt32(Console.ReadLine());
+                    if (q < 0) throw new Exception();
+                    Array.Resize(ref arr, q);
+                    Console.WriteLine("Размер изменен! Новый массив:");
+                    foreach (string elem in arr)
+                        Console.WriteLine(elem);
+                }
+                catch
+                {
+                    Console.WriteLine("Ошибка!");
+                }
+            }
+
+            if (meth_t == 9)
+            {
+                Array.Sort(arr);
+                Console.WriteLine("Массив отсортирован в алфавитном порядке!");
+                foreach (string elem in arr) Console.WriteLine(elem);
+            }
+
+            if (meth_t == 10)
+            {
+                Console.WriteLine("До новых встреч!");
+                bue = true;
+            }
+        }
+    }
+
+    if (collect_type == 2)
+    {
+        ok = false;
+        int len = 0;
+        while (!ok)
+        {
+            Console.Write("Введите изначальную длину списка ArrayList: ");
+            try
+            {
+                len = Convert.ToInt32(Console.ReadLine());
+                if (len < 1) throw new Exception();
+                ok = true;
+            }
+            catch
+            {
+                Console.WriteLine("Введите целое положительное число");
+            }
+        }
+        ArrayList list = new ArrayList();
+        Console.WriteLine("Заполните список");
+        for (int i = 0; i < len; i++)
+        {
+            list.Add(Console.ReadLine());
+        }
+
+        bool bue = false;
+        while (!bue)
+        {
+            int meth_t = choose_method(collect_type);
+            if (meth_t == 1)
+            {
+                Console.WriteLine($"Длина списка = {list.Count}");
+            }
+            if (meth_t == 2)
+            {
+                Console.Write("Что ищем? ");
+                string ob = Console.ReadLine();
+                int ind = list.BinarySearch(ob);
+                Console.WriteLine($"Элемент {ob} найден под индексом {ind}");
+            }
+            if (meth_t == 3)
+            {
+                string[] arr_copy = new string[list.Count];
+                list.CopyTo(arr_copy);
+                Console.WriteLine("Список скопирован!");
+            }
+            if (meth_t == 4)
+            {
+                Console.Write("Что ищем? ");
+                string ob = Console.ReadLine();
+                int ind = list.IndexOf(ob);
+                Console.WriteLine($"{ob} найден под индексом {ind}");
+            }
+            if (meth_t == 5)
+            {
+                try
+                {
+                    Console.Write("Какой элемент вставим? ");
+                    string ob = Console.ReadLine();
+                    Console.Write("На какую позицию? ");
+                    int pos = Convert.ToInt32(Console.ReadLine());
+                    if (pos < 0 || pos > list.Count)
+                        throw new Exception();
+                    list.Insert(pos, ob);
+                    Console.WriteLine("Готово!");
+                    foreach(string elem in list) Console.WriteLine(elem);
+                }
+                catch { Console.WriteLine("Ошибка!"); }
+            }
+            if (meth_t == 6)
+            {
+                list.Reverse();
+                Console.WriteLine("Список перевернут!");
+                foreach (string elem in list) Console.WriteLine(elem);
+            }
+            if (meth_t == 7)
+            {
+                list.Sort();
+                Console.WriteLine("Список отсортирован в алфавитном порядке!");
+                foreach (string elem in list) Console.WriteLine(elem);
+            }
+            if (meth_t == 8)
+            {
+                Console.Write("Какой элемент добавим? ");
+                string elem = Console.ReadLine();
+                list.Add(elem);
+                Console.WriteLine($"Элемент {elem} добавлен!");
+                foreach (string el in list) Console.WriteLine(el);
+            }
+            if (meth_t == 9)
+            {
+                Console.WriteLine("До новых встреч!");
+                bue = true;
+            }
+        }
+    }
+    if (collect_type == 3)
+    {
+        ok = false;
+        int len = 0;
+        while (!ok)
+        {
+            Console.Write("Введите изначальную длину списка SortedList: ");
+            try
+            {
+                len = Convert.ToInt32(Console.ReadLine());
+                if (len < 1) throw new Exception();
+                ok = true;
+            }
+            catch
+            {
+                Console.WriteLine("Введите целое положительное число");
+            }
+        }
+        SortedList list = new SortedList();
+        Console.WriteLine("Заполните список");
+        for (int i = 0; i < len; i++)
+        {
+            Console.Write($"Ключ {i + 1}: ");
+            string key = Console.ReadLine();
+            Console.Write($"Значение {i + 1}: ");
+            string val = Console.ReadLine();
+            list.Add(key, val);
+        }
+
+        bool bue = false;
+        while (!bue)
+        {
+            int meth_t = choose_method(collect_type);
+            if (meth_t == 1)
+            {
+                Console.WriteLine("Введите ключ и значение");
+                Console.Write("Ключ: ");
+                string key = Console.ReadLine();
+                Console.Write("Значение: ");
+                string val = Console.ReadLine();
+                list.Add(key, val);
+                Console.WriteLine("Добавлено!");
+                foreach (string k in list.Keys)
+                    Console.WriteLine($"{k} - {list[k]}");
+            }
+            if (meth_t == 2)
+            {
+                Console.Write("Какой ключ ищем? ");
+                string k = Console.ReadLine();
+                int ind = list.IndexOfKey(k);
+                Console.WriteLine($"Ключ {k} найден под индексом {ind}");
+            }
+            if (meth_t == 3)
+            {
+                Console.Write("Какое значение ищем? ");
+                string v = Console.ReadLine();
+                int ind = list.IndexOfKey(v);
+                Console.WriteLine($"Значение {v} найдено под индексом {ind}");
+            }
+            if (meth_t == 4)
+            {
+                try
+                {
+                    Console.Write("Введите индекс: ");
+                    int ind = Convert.ToInt32(Console.ReadLine());
+                    if (ind < 0 || ind >= list.Count) throw new Exception();
+                    object k = list.GetKey(ind);
+                    Console.WriteLine($"Под индексом {ind} найден ключ {k}");
+                }
+                catch { Console.WriteLine("Ошибка"); }
+            }
+            if (meth_t == 5)
+            {
+                try
+                {
+                    Console.Write("Введите индекс: ");
+                    int ind = Convert.ToInt32(Console.ReadLine());
+                    if (ind < 0 || ind >= list.Count) throw new Exception();
+                    object v = list.GetByIndex(ind);
+                    Console.WriteLine($"Под индексом {ind} найдено значение {v}");
+                }
+                catch { Console.WriteLine("Ошибка"); }
+            }
+            if (meth_t == 6)
+            {
+                Console.WriteLine("До новых встреч!");
+                bue = true;
+            }
+        }
+    }

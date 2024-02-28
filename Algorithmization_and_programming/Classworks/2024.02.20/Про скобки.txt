@@ -1,0 +1,38 @@
+static void Main(string[] args)
+{
+    Dictionary<char, char> skobki = new Dictionary<char, char>() 
+    { 
+        { ')', '(' },
+        { '}', '{' },
+        { ']', '[' }
+    };
+    string sequence = Console.ReadLine();
+    bool ok = true;
+    Stack<char> stack = new Stack<char>();
+    foreach (char skobka in sequence)
+    {
+        if (skobka == '(' || skobka == '{' || skobka == '[')
+            stack.Push(skobka);
+        else
+        {
+            if (stack.Count != 0)
+            {
+                if (skobki[skobka] == stack.Peek())
+                    stack.Pop();
+                else
+                {
+                    ok = false;
+                    break;
+                }
+            }
+            else
+            {
+                ok = false;
+                break;
+            }
+        }
+    }
+    if (stack.Count == 0 && ok)
+        Console.WriteLine("Правильно!");
+    else
+        Console.WriteLine("Неправильно!");

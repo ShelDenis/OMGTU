@@ -1,0 +1,59 @@
+static void Main(string[] args)
+{
+    Console.WriteLine("Введите данные о телефонных звонках в формате" +
+        "\nномер_телефона дата_разговора время_начала_разговора количество_минут" +
+        "\nПосле ввода всех данных введите слово всё");
+    Queue queue = new Queue();
+    string line = Console.ReadLine();
+    while (line != "всё") 
+    {
+        queue.Enqueue(line);
+        line = Console.ReadLine();
+    }
+    Dictionary<string, int> num_dct = new Dictionary<string, int>();
+    Hashtable num_ht = new Hashtable();
+    Dictionary<string, int> date_dct = new Dictionary<string, int>();
+    Hashtable date_ht = new Hashtable();
+    int n = queue.Count;
+
+    for (int i = 0; i < n; i++)
+    {
+        string[] data = (queue.Dequeue().ToString()).Split(' ');
+        string number = data[0];
+        string date = data[1];
+        string time_start = data[2];
+        string minutes = data[3];
+        if (!num_dct.ContainsKey(number))
+            num_dct.Add(number, Convert.ToInt32(minutes));
+        else
+            num_dct[number] += Convert.ToInt32(minutes);
+        if (!num_ht.ContainsKey(number))
+            num_ht.Add(number, Convert.ToInt32(minutes));
+        else
+            num_ht[number] = Convert.ToInt32(num_ht[number]) + Convert.ToInt32(minutes);
+        if (!date_dct.ContainsKey(date))
+            date_dct.Add(date, Convert.ToInt32(minutes));
+        else
+            date_dct[date] += Convert.ToInt32(minutes);
+        if (!date_ht.ContainsKey(date))
+            date_ht.Add(date, Convert.ToInt32(minutes));
+        else
+            date_ht[date] = Convert.ToInt32(date_ht[date]) + Convert.ToInt32(minutes);
+    }
+
+    Console.WriteLine("Данные из словаря\nНомер телефона\tКоличество минут");
+    foreach (string key in num_dct.Keys)
+        Console.WriteLine($"{key} --- {num_dct[key]}");
+    Console.WriteLine("Данные из хэш-таблицы\nНомер телефона\tКоличество минут");
+    foreach (string key in num_ht.Keys)
+        Console.WriteLine($"{key} --- {num_ht[key]}");
+
+    Console.WriteLine("Данные из словаря\nДата\tКоличество минут");
+    foreach (string key in date_dct.Keys)
+        Console.WriteLine($"{key} --- {date_dct[key]}");
+    Console.WriteLine("Данные из хэш-таблицы\nДата\tКоличество минут");
+    foreach (string key in date_ht.Keys)
+        Console.WriteLine($"{key} --- {date_ht[key]}");
+
+    Console.ReadLine();
+}

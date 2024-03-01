@@ -1,0 +1,47 @@
+SortedSet<string>[] set_array = new SortedSet<string>[3];
+SortedSet<string> u = new SortedSet<string>();
+for (int i = 0; i < set_array.Length; i++)
+{
+    Console.Write($"Введите количество элементов множества №{i + 1}: ");
+    int n = Convert.ToInt32(Console.ReadLine());
+    bool first_time = true;
+    Console.WriteLine($"Введите элементы множества №{i + 1}: ");
+    for (int j = 0; j < n; j++)
+    {
+        if (first_time)
+        {
+            set_array[i] = new SortedSet<string>();
+            first_time = false;
+        }
+        string elem = Console.ReadLine();
+        set_array[i].Add(elem);
+        u.Add(elem);
+    }
+}
+Console.WriteLine("Объединение множеств:");
+Console.Write("{");
+foreach (string elem in u)
+    Console.Write(elem + ", ");
+Console.Write("}\n");
+
+for (int i = 0; i < set_array.Length; i++)
+{
+    Console.WriteLine($"Дополнение множества {i + 1}");
+    List<string> dopolnenie = u.Except<string>(set_array[i]).ToList();
+    Console.Write("{");
+    foreach (string elem in dopolnenie)
+        Console.Write(elem + ", ");
+    Console.Write("}\n");
+}
+
+SortedSet<string> intersection = u;
+foreach (SortedSet <string> s in  set_array)
+{
+    intersection.IntersectWith(s);
+}
+
+Console.WriteLine("Пересечение множеств:");
+Console.Write("{");
+foreach (string elem in intersection)
+    Console.Write(elem + ", ");
+Console.Write("}\n");

@@ -1,0 +1,11 @@
+SortedSet<string> set = new SortedSet<string>();
+Console.Write("Введите количество звонков: ");
+int n = Convert.ToInt32(Console.ReadLine());
+Console.WriteLine("Введите данные в формате:\nномер_телефона количество_минут");
+for (int i = 0; i < n; i++) 
+{
+    string[] line = Console.ReadLine().Split(' ');
+    set.Add(line[0]);
+}
+Console.WriteLine($"Уникальных номеров - {set.Count}");
+Console.ReadLine();

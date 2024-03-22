@@ -1,0 +1,112 @@
+Dictionary<string, List<string[]>> dct = new Dictionary<string, List<string[]>>();
+Console.Write("Введите число записей о телефонных звонках - ");
+int n = Convert.ToInt32(Console.ReadLine());
+Console.WriteLine("Введите данные в формате");
+Console.WriteLine("номер_с_которого_звонили на_который_звонили дата_звонка кол-во_минут");
+for (int i = 0; i < n; i++)
+{
+    string[] data = Console.ReadLine().Split(' ');
+    string num_from = data[0];
+    string num_to = data[1];
+    string date = data[2];
+    string minutes = data[3];
+
+    string[] phone_data = { num_to, date, minutes };
+    if (dct.ContainsKey(num_from))
+        dct[num_from].Add(phone_data);
+    else dct[num_from] = new List<string[]> { phone_data };
+}
+foreach (string num in dct.Keys)
+{
+
+    Dictionary<string, Dictionary<string, int>> freq_dct
+        = new Dictionary<string, Dictionary<string, int>>();
+    Dictionary<string, Dictionary<string, int>> min_dct
+        = new Dictionary<string, Dictionary<string, int>>();
+    List<string[]> values = dct[num].ToList();
+    for (int k = 0; k < values.Count; k++)
+    {
+        if (freq_dct.ContainsKey(values[k][1]))
+        {
+            if (freq_dct[values[k][1]].ContainsKey(values[k][0]))
+                freq_dct[values[k][1]][values[k][0]]++;
+            else
+                freq_dct[values[k][1]][values[k][0]] = 1;
+        }
+        else
+        {
+            freq_dct[values[k][1]] = new Dictionary<string, int> { };
+            if (freq_dct[values[k][1]].ContainsKey(values[k][0]))
+                freq_dct[values[k][1]][values[k][0]]++;
+            else
+                freq_dct[values[k][1]][values[k][0]] = 1;
+        }
+
+        if (min_dct.ContainsKey(values[k][1]))
+        {
+            if (min_dct[values[k][1]].ContainsKey(values[k][0]))
+                min_dct[values[k][1]][values[k][0]] += Convert.ToInt32(values[k][2]);
+            else
+                min_dct[values[k][1]][values[k][0]] = Convert.ToInt32(values[k][2]);
+        }
+        else
+        {
+            min_dct[values[k][1]] = new Dictionary<string, int> { };
+            if (min_dct[values[k][1]].ContainsKey(values[k][0]))
+                min_dct[values[k][1]][values[k][0]] += Convert.ToInt32(values[k][2]);
+            else
+                min_dct[values[k][1]][values[k][0]] = Convert.ToInt32(values[k][2]);
+        }
+
+    }
+
+    Console.WriteLine($"Номер {num} чаще всего звонил");
+
+    foreach (string d in freq_dct.Keys)
+    {
+        string max_freq_num = "";
+        int mx_freq = 0;
+        Console.WriteLine($"За {d}");
+        foreach (string key in freq_dct[d].Keys)
+        {
+            if (freq_dct[d][key] > mx_freq)
+            {
+                mx_freq = freq_dct[d][key];
+                max_freq_num = key;
+            }
+        }
+        Console.WriteLine($"{max_freq_num} - {mx_freq} раз");
+        Console.WriteLine("Данные о звонках:");
+        foreach (string[] v in values)
+        {
+            if (v[0] == max_freq_num && v[1] == d)
+                Console.WriteLine($"{v[1]} --- {v[2]} мин.");
+        }
+        Console.WriteLine();
+    }
+    foreach (string d in min_dct.Keys)
+    {
+
+        string max_minute_num = "";
+        int mx_minute = 0;
+        foreach (object key in min_dct[d].Keys)
+        {
+            if (min_dct[d][key.ToString()] > mx_minute)
+            {
+                mx_minute = min_dct[d][key.ToString()];
+                max_minute_num = key.ToString();
+            }
+        }
+        Console.WriteLine($"{max_minute_num} - {mx_minute} минут всего");
+        Console.WriteLine("Данные о звонках:");
+        foreach (string[] v in values)
+        {
+            if (v[0] == max_minute_num && v[1] == d)
+                Console.WriteLine($"{v[1]} --- {v[2]} мин.");
+        }
+        Console.WriteLine();
+    }
+    Console.WriteLine("\n");
+}
+
+Console.ReadLine();

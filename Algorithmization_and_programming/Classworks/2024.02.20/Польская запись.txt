@@ -1,0 +1,31 @@
+Stack<double> stack = new Stack<double>();
+string[] pole_code = Console.ReadLine().Split(' ');
+foreach(string elem in pole_code)
+{
+    if (!"+-*/^".Contains(elem))
+        stack.Push(Convert.ToDouble(elem));
+    else
+    {
+        double op1, op2;
+        if (stack.Count > 0)
+            op2 = stack.Pop();
+        else
+            op2 = 0;
+        if (stack.Count > 0)
+            op1 = stack.Pop();
+        else
+            op1 = 0;
+
+        if (elem == "+")
+            stack.Push(op1 + op2);
+        else if (elem == "-")
+            stack.Push(op1 - op2);
+        else if (elem == "*")
+            stack.Push(op1 * op2);
+        else if (elem == "/")
+            stack.Push(op1 / op2);
+        else if (elem == "^")
+            stack.Push(Math.Pow(op1, op2));
+    }
+}
+Console.WriteLine(stack.Peek());

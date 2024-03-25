@@ -1,0 +1,68 @@
+internal class Program
+{
+    delegate void Washing(Car car);
+
+    public class Car
+    {
+        public string model;
+        public string num;
+        public string color;
+        public int year;
+        public Car(string model, string num, string color, int year)
+        {
+            this.model = model;
+            this.num = num;
+            this.color = color;
+            this.year = year;
+        }
+
+        public string get_info() 
+        {
+            return $"{model} {num} {color} {year} года выпуска";
+        }
+    }
+
+    public class Garage
+    {
+        int num;
+        Car[] cars;
+
+        public Garage(int num, Car[] cars)
+        {
+            this.num = num;
+            this.cars = cars;
+        }
+
+        public Car[] Cars { get => cars; }
+    }
+
+    public class CarWash
+    {
+        public void wash(Car car) 
+        {
+            Console.WriteLine($"{car.get_info()} помыта!");
+        }
+    }
+
+    static void Main(string[] args)
+    {
+        Car[] cars = new Car[6];
+        cars[0] = new Car("Toyota Carina", "м589ро-55", "розовая", 2005);
+        cars[1] = new Car("Dodge Challenger", "u315he-55", "серо-буро-малиновый", 1997);
+        cars[2] = new Car("УАЗ Буханка", "н521та-55", "хаки", 1980);
+        cars[3] = new Car("КамАЗ-мастер", "о851гр-55", "синий", 2011);
+        cars[4] = new Car("Бэт-мобиль", "just1ce-55", "черный", 1985);
+        cars[5] = new Car("Toyota Mark 2", "s@ben1n-55", "серебристая", 2005);
+
+        Garage garage = new Garage(1, cars);
+        CarWash carWash = new CarWash();
+        Washing washing = carWash.wash;
+
+        foreach (Car car in garage.Cars)
+            washing(car);
+  
+        Console.ReadLine();
+    }
+
+    
+}

@@ -1,0 +1,95 @@
+internal class Program
+{
+    delegate double UnOperation(double x);
+    delegate double BinOperation(double x, double y);
+    public interface MathOps
+    {
+        double plus(double x, double y);
+        double minus(double x, double y);
+        double multiply(double x, double y);
+        double divide(double x, double y);
+        double sq_root(double x);
+        double sinus(double x);
+        double cosus(double x);
+    }
+
+    public class MathOperator : MathOps
+    {
+        public double plus(double x, double y) { return x + y; }
+        public double minus(double x, double y) { return x - y; }
+        public double multiply(double x, double y) { return x * y; }
+        public double divide(double x, double y)
+        {
+            if (y == 0)
+                throw new DivideByZeroException("Деление на ноль!");
+            return divide(x, y);
+        }
+        public double sq_root(double x)
+        {
+            if (x < 0)
+                throw new Exception("Корень из отрицательного числа!");
+            return Math.Sqrt(x);
+        }
+        public double sinus(double x) { return Math.Sin(x); }
+        public double cosus(double x) { return Math.Cos(x); }
+    }
+    static void Main(string[] args)
+    {
+        MathOperator mathOperator = new MathOperator();
+        UnOperation f_un = x => 0;
+        BinOperation f_bin = (x, y) => 0;
+
+        
+        Console.WriteLine("Выберите тип операции:\n1) +\n2) -\n3) *\n4) /\n5) sqrt\n6) sin\n7) cos");
+        int type_op = Convert.ToInt32(Console.ReadLine());
+        try
+        {
+            if (type_op < 5)
+            {
+                double op1 = Convert.ToDouble(Console.ReadLine());
+                double op2 = Convert.ToDouble(Console.ReadLine());
+                switch (type_op)
+                {
+                    case 1:
+                        f_bin = mathOperator.plus;
+                        break;
+                    case 2:
+                        f_bin = mathOperator.minus;
+                        break;
+                    case 3:
+                        f_bin = mathOperator.multiply;
+                        break;
+                    case 4:
+                        f_bin = mathOperator.divide;
+                        break;
+                }
+                Console.WriteLine(f_bin(op1, op2));
+            }
+            else
+            {
+                double op = Convert.ToDouble(Console.ReadLine());
+                switch (type_op)
+                {
+                    case 5:
+                        f_un = mathOperator.sq_root;
+                        break;
+                    case 6:
+                        f_un = mathOperator.sinus;
+                        break;
+                    case 7:
+                        f_un = mathOperator.cosus;
+                        break;
+                }
+                Console.WriteLine(f_un(op));
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+  
+        Console.ReadLine();
+    }
+
+    
+}

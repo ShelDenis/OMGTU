@@ -1,0 +1,110 @@
+public class MathOps<T> where T : struct 
+{
+    T x, y;
+    public MathOps(T x, T y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    public T X { get { return x; } }
+    public T Y { get { return y; } }
+
+    public void summary()
+    {
+        dynamic a = x;
+        dynamic b = y;
+        Console.WriteLine(a + b);
+    }
+
+    public void diff()
+    {
+        dynamic a = x;
+        dynamic b = y;
+        Console.WriteLine(a - b);
+    }
+    public void mult()
+    {
+        dynamic a = x;
+        dynamic b = y;
+        Console.WriteLine(a * b);
+    }
+    public void divide()
+    {
+        dynamic a = x;
+        dynamic b = y;
+        Console.WriteLine(a / b);
+    }
+}
+
+static void Main(string[] args)
+{
+    Console.WriteLine("1) Целые числа\n2) Вещественные числа");
+    string what = Console.ReadLine();
+    try
+    {
+        if (what == "1")
+        {
+            int p = Convert.ToInt32(Console.ReadLine());
+            int q = Convert.ToInt32(Console.ReadLine());
+            MathOps<int> op = new MathOps<int>(p, q);
+            Console.WriteLine("Операция? +, -, *, /");
+            string how = Console.ReadLine();
+            switch (how)
+            {
+                case "+":
+                    op.summary();
+                    break;
+                case "-":
+                    op.diff();
+                    break;
+                case "*":
+                    op.mult();
+                    break;
+                case "/":
+                    op.divide();
+                    break;
+                default:
+                    Console.WriteLine("Неверная операция!");
+                    break;
+            }
+        }
+        else if (what == "2")
+        {
+            double p = Convert.ToDouble(Console.ReadLine());
+            double q = Convert.ToDouble(Console.ReadLine());
+            MathOps<double> op = new MathOps<double>(p, q);
+            Console.WriteLine("Операция? +, -, *, /");
+            string how = Console.ReadLine();
+            switch (how)
+            {
+                case "+":
+                    op.summary();
+                    break;
+                case "-":
+                    op.diff();
+                    break;
+                case "*":
+                    op.mult();
+                    break;
+                case "/":
+                    op.divide();
+                    break;
+                default:
+                    Console.WriteLine("Неверная операция!");
+                    break;
+            }
+        }
+        else
+            Console.WriteLine("Так 1 или 2?");
+    }
+    catch (FormatException)
+    {
+        Console.WriteLine("Ошибка типов!");
+    }
+    catch (DivideByZeroException) 
+    {
+        Console.WriteLine("Деление на ноль!");
+    }
+    Console.ReadLine();
+}

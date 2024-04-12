@@ -1,0 +1,151 @@
+using System;
+using System.Collections;
+using System.IO;
+using System.Text;
+
+namespace First
+{
+    internal class Program
+    {      
+        public struct Person
+        {
+            public string[] fio;
+            public string phone;
+            public string city;
+
+            public Person(string[] fio, string phone, string city)
+            {
+                this.fio = fio;
+                this.phone = phone;
+                this.city = city;
+            }
+
+            public string choose_by_city(string c)
+            {
+                if (c == city)
+                {
+                    string str = $"{String.Join(" ", fio)} с т.н. {phone} живет в {city}";
+                    Console.WriteLine(str);
+                    return str;
+                }
+                return "";
+            }
+
+            public string choose_by_surname(string sn)
+            {
+                if (sn == fio[0])
+                {
+                    string str = $"{String.Join(" ", fio)} с т.н. {phone} живет в {city}";
+                    Console.WriteLine(str);
+                    return str;
+                }
+                return "";
+            }
+
+            public string choose_by_fio_and_city(string fio_fio, string c)
+            {
+                if (String.Join(" ", fio) == fio_fio && c == city)
+                {
+                    string str = $"{String.Join(" ", fio)} с т.н. {phone} живет в {city}";
+                    Console.WriteLine(str);
+                    return str;
+                }
+                return "";
+            }
+        }
+        static void Main(string[] args)
+        {
+            int n = File.ReadAllLines("my_data.txt").Length;
+            Person[] list = new Person[n];
+            using(StreamReader sr = new StreamReader("my_data.txt"))
+            {
+                string line;
+                int i = 0;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    string[] line_data = line.Split(' ');
+                    string[] arr = { line_data[0], line_data[1], line_data[2] };
+                    Person p = new Person(arr, line_data[3], line_data[4]);
+                    list[i] = p;
+                    i++;
+                }
+
+                ArrayList out1 = new ArrayList(); 
+                Console.WriteLine("1) Выборка по городу");
+                Console.Write("Введите город: ");
+                string town = Console.ReadLine();
+                bool ok = false;
+                foreach (Person p in list)
+                {
+                    out1.Add(p.choose_by_city(town));
+                    ok = true;
+                }
+                if (!ok)
+                    Console.WriteLine("Ничего не найдено!");
+
+                ArrayList out2 = new ArrayList();
+                Console.WriteLine("2) Выборка по фамилии");
+                Console.Write("Введите фамилию: ");
+                string family = Console.ReadLine();
+                ok = false;
+                foreach (Person p in list)
+                {
+                    out2.Add(p.choose_by_surname(family));
+                    ok = true;
+                }
+                if (!ok)
+                    Console.WriteLine("Ничего не найдено!");
+
+                ArrayList out3 = new ArrayList();
+                Console.WriteLine("3) Выборка по ФИО и городу");
+                Console.Write("Введите ФИО: ");
+                string famio = Console.ReadLine();
+                Console.Write("Введите город: ");
+                string gorodo = Console.ReadLine();
+                ok = false;
+                foreach (Person p in list)
+                {
+                    out3.Add(p.choose_by_fio_and_city(famio, gorodo));
+                    ok = true;
+                }
+                if (!ok)
+                    Console.WriteLine("Ничего не найдено!");
+
+                FileStream fs = File.Create("my_out1.txt");
+                for (int j = 0; j < out1.Count; j++)
+                {
+                    if (out1[j].ToString() != "")
+                    {
+                        byte[] info = new UTF8Encoding(true).GetBytes(out1[j].ToString() + "\n");
+                        fs.Write(info, 0, info.Length);
+                    }
+                }
+                fs.Close();
+
+                fs = File.Create("my_out2.txt");
+                for (int j = 0; j < out2.Count; j++)
+                {
+                    if (out2[j].ToString() != "")
+                    {
+                        byte[] info = new UTF8Encoding(true).GetBytes(out2[j].ToString() + "\n");
+                        fs.Write(info, 0, info.Length);
+                    }
+                }
+                fs.Close();
+
+                fs = File.Create("my_out3.txt");
+                for (int j = 0; j < out3.Count; j++)
+                {
+                    if (out3[j].ToString() != "")
+                    {
+                        byte[] info = new UTF8Encoding(true).GetBytes(out3[j].ToString() + "\n");
+                        fs.Write(info, 0, info.Length);
+                    }
+                }
+                fs.Close();
+            }
+            Console.ReadLine();
+        }        
+    }
+}
+

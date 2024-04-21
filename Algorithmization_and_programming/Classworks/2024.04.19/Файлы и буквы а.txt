@@ -1,0 +1,42 @@
+StreamReader sr = new StreamReader("AAA.txt");
+
+int count = 0;
+int min_count = 1000;
+string min_str = "";
+bool open = false;
+
+while (!sr.EndOfStream)
+{
+    string line = sr.ReadLine();
+    foreach (char elem in line)
+    {
+        if (elem == 'a')
+        {
+            if (open)
+                count++;
+            else
+            {
+                open = true;
+                count = 1;
+            }
+        }
+        else
+        {
+            if (open)
+            {
+                open = false;
+                if (count < min_count)
+                {
+                    min_count = count;
+                    min_str = line;
+                    count = 0;
+                }
+            }
+
+        }
+
+    }
+}
+
+Console.WriteLine(min_str);
+sr.Close();

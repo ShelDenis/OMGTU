@@ -1,0 +1,39 @@
+public static void print(List<string> lst)
+{
+    foreach (string es in lst)
+        Console.Write(es + ", ");
+}
+static void Main(string[] args)
+{
+    List<string> list = new List<string>() { "pear", "avocado", "apple", "pea",
+    "banana", "grape", "orange", "lemon", "grapefruit", "lime", "mango", "pineapple"};
+
+    var even_strs = from s in list
+                    where s.Length % 2 == 0
+                    select s;
+
+    print(even_strs.ToList());
+
+    List<string> new_list = new List<string>();
+    foreach (string s in even_strs)
+        new_list.Add(s);
+
+    Console.WriteLine();
+    Console.Write("Сколько введем новых слов? ");
+    int n = Convert.ToInt32(Console.ReadLine());
+    for (int i = 0; i < n; i++)
+        new_list.Add(Console.ReadLine());
+
+    for (int i = 0; i < new_list.Count; i++)
+        if (i % 2 == 1)
+            new_list[i] = "-";
+
+    even_strs = from s in new_list
+                where s.Length % 2 == 0
+                select s;
+
+    print(even_strs.ToList());
+
+    Console.ReadLine();
+
+}

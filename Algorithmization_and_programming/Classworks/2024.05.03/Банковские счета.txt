@@ -1,0 +1,67 @@
+public class BankCount
+{
+    int bill;
+    string fio;
+    string phone;
+    double income;
+    double expense;
+    double taxes;
+    public BankCount(int bill, string fio, string phone, double income, double expense) 
+    {
+        this.bill = bill;
+        this.fio = fio;
+        this.phone = phone;
+        this.income = income;
+        this.expense = expense;
+        this.taxes = income * 0.05;
+    }
+
+    public int Bill { get =>  bill; set => bill = value;}
+    public string Fio { get => fio; set => fio = value;}
+    public string Phone { get => phone; set => phone = value;}
+    public double Income { get => income; set => income = value;}
+    public double Expense { get => expense; set => expense = value;}
+    public double Taxes { get => taxes;}
+}
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        BankCount[] bank_data = new BankCount[10] 
+        { new BankCount(101, "Макс", "8-880", 100.1, 100),
+        new BankCount(102, "Марк", "8-881", 80.1, 50),
+        new BankCount(103, "Сережа", "8-882", 103, 73),
+        new BankCount(104, "Денис", "8-883", 90.5, 45.9),
+        new BankCount(105, "Настя", "8-884", 200.87, 114),
+        new BankCount(106, "Артем", "8-885", 136.71, 79.12),
+        new BankCount(107, "Давид", "8-886", 805.32, 796.41),
+        new BankCount(108, "Дима", "8-887", 84.51, 10.8),
+        new BankCount(109, "Ангелина", "8-888", 150.74, 125.56),
+        new BankCount(110, "Тимур", "8-889", 109.99, 99.9),};
+
+        int poors = (from b in bank_data
+                    where b.Income - b.Expense - b.Taxes < 0
+                    select b).Count();
+
+        Console.WriteLine($"Количество клиентов с отрицательным балансом - {poors}");
+
+        var richest = from client in bank_data
+                         where (client.Income - client.Expense - client.Taxes) ==
+                             (from b in bank_data
+                              select b.Income - b.Expense - b.Taxes).Max()
+                         select client.Fio;
+
+        Console.WriteLine($"Клиент с наибольшим балансом - {richest.ToArray()[0]}");
+
+        double aver_income = (from b in bank_data
+                          select b.Income).Average();
+
+        Console.WriteLine($"Средний доход = {aver_income}");
+
+        double sum_taxes = (from b in bank_data
+                              select b.Taxes).Sum();
+
+        Console.WriteLine($"Сумма налогов = {sum_taxes}");
+
+
+    }

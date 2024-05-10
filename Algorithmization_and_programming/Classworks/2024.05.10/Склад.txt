@@ -1,0 +1,76 @@
+public class Item
+{
+    int num;
+    string name;
+    string category;
+    int n;
+    double price;
+    int storage;
+
+    public Item(int num, string name, string category, int n, double price, int storage)
+    {
+        this.num = num;
+        this.name = name;
+        this.category = category;
+        this.n = n;
+        this.price = price;
+        this.storage = storage;
+    }
+
+    public int Num { get => num; set => this.num = value; }
+    public string Name { get => name; set => this.name = value; }
+    public string Category { get => category; set => this.category = value; }
+    public int N { get => n; set => this.n = value; }
+    public double Price { get => price; set => this.price = value; }
+    public int Storage { get => storage; set => this.storage = value; }
+
+}
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Item[] items = new Item[10] 
+        { new Item(100, "Рубашка красная", "Одежда", 5, 1000, 1),
+        new Item(101, "Рубашка красная", "Одежда", 21, 1500, 2),
+        new Item(271, "Пылесос Electrolux", "Техника", 2, 15100, 1),
+        new Item(272, "Мойка высокого давления Karcher", "Техника", 8, 10250, 2),
+        new Item(294, "Стиральная машина Samsung", "Техника", 4, 30000, 2),
+        new Item(135, "Худи синий", "Одежда", 20, 1199, 1),
+        new Item(752, "Худи желтый", "Одежда", 14, 999, 2),
+        new Item(111, "Компьютер игровой", "Техника", 3, 79999, 2),
+        new Item(468, "Коврик для мыши", "", 48, 199, 1),
+        new Item(666, "Коробок спичек", "", 563, 5, 2),};
+
+        var storages = (from it in items select it.Storage).Distinct().ToList();
+
+        var volumes = (from st in storages select (from it in items where it.Storage == st select it.N).Sum()).ToList();
+
+        Console.WriteLine("Общий объем товаров по каждому складу:");
+        for (int i = 0; i < storages.Count(); i++)
+            Console.WriteLine($"Склад №{storages[i]} - {volumes[i]} единиц товара");
+
+        var categories = (from it in items where it.Category != "" select it.Category).Distinct().ToList();
+
+        var max_prices = (from c in categories where c != "" select (from it in items where it.Category == c select it.Price).Max()).ToList();
+
+        Console.WriteLine("Максимальная цена товара в каждой категории:");
+        for (int i = 0; i < categories.Count(); i++)
+            Console.WriteLine($"{categories[i]} - {max_prices[i]} руб.");
+
+        double aver_price = (from it in items where it.Category == "" select it.Price).Average();
+
+        Console.WriteLine($"Средняя цена товаров без категории - {aver_price} руб.");
+
+        Item cheep_item = (from item in items where item.Price == (from it in items select it.Price).Min() select item).Last();
+
+        Console.WriteLine($"Самый дешевый товар - №{cheep_item.Num} {cheep_item.Name}");
+
+        double all_cost = (from item in items select item.Price * item.N).Sum();
+
+        Console.WriteLine($"Общая стоимость всех товаров со всех складов - {all_cost} руб.");
+
+
+        Console.ReadLine();
+
+    }
+}

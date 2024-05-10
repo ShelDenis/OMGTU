@@ -1,0 +1,10 @@
+int n_odd = 0;
+StreamReader sr = new StreamReader("nums.txt");
+while (!sr.EndOfStream)
+{
+    int num = Convert.ToInt32(sr.ReadLine());
+    if (num % 2 == 1)
+        n_odd++;
+}
+int output = Fact(n_odd) / (2 * Fact(n_odd - 2));
+Console.WriteLine(output);

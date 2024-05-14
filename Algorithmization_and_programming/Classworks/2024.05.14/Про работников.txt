@@ -1,0 +1,74 @@
+public class Employee
+{
+    int id;
+    string fio;
+    string edu;
+    string prof;
+    double salary;
+    int n;
+    double price;
+
+    public int Id { get => this.id; set => this.id = value; }
+    public string Fio { get => this.fio; set => this.fio = value; }
+    public string Edu { get => this.edu; set => this.edu = value; }
+    public string Prof { get => this.prof; set => this.prof = value; }
+    public double Salary { get => this.salary; set => this.salary = value; }
+    public int N { get => this.n; set => this.n = value; }
+    public double Price { get => this.price; set => this.price = value; }
+
+    public Employee(int id, string fio, string edu,
+        string prof, double salary, int n, double price) 
+    {
+        this.id = id;
+        this.fio = fio;
+        this.edu = edu;
+        this.prof = prof;
+        this.salary = salary;
+        this.n = n;
+        this.price = price;
+    }
+
+}
+    internal class Program
+{
+    
+    static void Main(string[] args)
+    {
+        Employee[] employees =
+        {
+            new Employee(1, "Джон", "Среднее специальное", "Повар", 1000, 50, 100),
+            new Employee(2, "Питер", "Среднее специальное", "Токарь-механик", 2500, 25, 250),
+            new Employee(3, "Гарри", "Высшее", "Инженер-конструктор", 14000, 10, 2000),
+            new Employee(4, "Арон", "Среднее общее", "Курьер", 450, 125, 50),
+            new Employee(5, "Сара", "Высшее", "Учитель", 1500, 75, 340),
+            new Employee(6, "Элизабет", "Среднее специальное", "Программист", 20000, 20, 600),
+            new Employee(7, "Билл", "Среднее общее", "Дворник", 300, 4, 50),
+            new Employee(8, "Рудольф", "Высшее", "Экономист", 3500, 30, 260),
+            new Employee(9, "Клара", "Среднее специальное", "Продавец", 900, 100, 10),
+            new Employee(10, "Сэм", "Высшее", "Вокалист", 990, 7, 150)
+        };
+
+        List<Employee> poor_emps = (from emp in employees where emp.Salary < emp.Price * emp.N select emp).ToList();
+
+        Console.WriteLine("Их зарплата меньше чем стоимость выработанной продукции");
+        foreach (Employee emp in poor_emps)
+            Console.WriteLine($"{emp.Id} {emp.Fio} {emp.Prof}");
+
+        int prod_count = (from emp in employees select emp.N).Sum();
+
+        Console.WriteLine($"Кол-во единиц продукции по всем рабочим = {prod_count}");
+
+        double all_cost = (from emp in employees select emp.N * emp.Price).Sum();
+
+        Console.WriteLine($"Суммарная стоимость всей продукции = {all_cost} $");
+
+        List<Employee> emps_no_less_50 = (from emp in employees where emp.Salary >= (emp.Price * emp.N) * 0.5 select emp).ToList();
+
+        Console.WriteLine("Их зарплата больше 50-ти % стоимости выработанной продукции");
+        foreach (Employee emp in emps_no_less_50)
+            Console.WriteLine($"{emp.Id} {emp.Fio} {emp.Prof}");
+
+
+        Console.ReadLine();
+
+    }
